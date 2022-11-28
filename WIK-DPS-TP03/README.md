@@ -1,80 +1,47 @@
-# WIK-DPS-TP02 | MONTAGNIER Yrlan
+# WIK-DPS-TP03 | MONTAGNIER Yrlan
 
-## Créer une image Docker avec un seul stage qui permet d’exécuter votre API développée précédemment (WIK-DPS-TP01)
-[dockerfile](dockerfile)
+## Créer un docker-compose avec pour seul service un container basé sur le Dockerfile créé dans le TP WIK-DPS-TP02
+Voir [docker-compose.yaml](./docker-compose.yaml)
+
+## Augmenter le nombre de réplicas à 4 pour ce service
+Cela se fait dans le docker-compose.yaml grâce aux lignes 
 ```
-FROM node as builder
-
-WORKDIR /usr/src/app
-
-COPY package*.json ./
-
-RUN npm install
-
-COPY . .
-
-RUN npx tsc
-
-CMD node build/index.js
-
-USER node
+deploy:
+    mode: replicated
+    replicas: 4 # On déploie 4 fois le container au sein du service my_app
 ```
-
-## L'image doit être la plus optimisée possible concernant l'ordre des layers afin de limiter le temps de build lors des modifications sur le code
-Le build de l'image docker à partir du dockerfile se fait via la commande `docker build -t api_typescript_docker .`, il prend environ ~10s à se faire.
-    ![Build_Image](/img/build_image.png)
-
-Pour le deuxième dockerfile, stage d'éxecution et de build séparés, ce qui rend l'image beaucoup plus rapide à build.
-    ![Build_Image2](/img/build_image2.png)
-## Scanner votre image avec docker scan, trivy ou clair pour obtenir la liste des vulnérabilités détectées
-Pour scanner mon image, j'ai utilisé trivy avec la commande trivy image `api_typescript_docker`.
-    ![Trivy](./img/Trivy.png)
-
-## L'image doit utiliser un utilisateur spécifique pour l'exécution de votre serveur web
-Dans le dockerfile, j'ai rajouté `USER node` à la fin du fichier, qui est intégré à l'image de node et permet de lancer le conteneur avec cet utilisateur `node`.
-Cela se passe donc pendant le build de l'image.
-
-Cette commande permet de retourner l'utilisateur sur lequel sont lancés les différents conteneurs en cours :
+Cela permet d'avoir 4 instances de notre application, le load balancer du serveur Nginx permettra de rediriger les requêtes sur ces 4 containers.
+## Modifier le docker-compose pour ajouter un reverse-proxy (nginx), seule le reverse-proxy doit être exposé sur votre hôte sur le port 8080
 ```
-yrlan@MSI-9SEXR:~$ docker inspect $(docker ps -q) --format '{{.Config.User}} {{.Name}}'
-node /API_TypeScript_Yrlan
+proxy:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:8081
+    depends_on: 
+      - my_app
+    networks:
+      - front-network
 ```
-On voit que notre conteneur (API_TypeScript_Yrlan) est bien lancé via l'utilisateur `node`
+Le reverse proxy tourne sur le port `8081` et est accessible depuis notre hôte depuis le port `8080`.
+## Configurer nginx (nginx.conf) pour loadbalancer les requêtes vers le service basé sur votre image
+listen 8081;
+```
+events { }
 
-## Créer une seconde image Docker pour votre API avec les mêmes contraintes en termes d'optimisations mais avec plusieurs stages : un pour l'étape de build et une autre pour l’exécution (qui ne contient pas les sources)
-```
-## Stage 1 - Build
-FROM node as builder
-WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json", "./"]
-RUN ["npm", "install"]
-COPY . .
-RUN ["npx", "tsc"]
+http {
 
-## Stage 2 - Exécution du serveur
-FROM builder as executer
-WORKDIR /usr/src/app
-ENTRYPOINT ["node", "./build/index"]
-USER node
-```
-Ici, le stage de build et d'éxécution sont séparés, j'ai aussi utilisé la syntaxe d'éxecution pour les commandes et l'entrypoint pour le lancement du serveur.
-```
-docker exec API_TypeScript_Yrlan ps -eo pid,ppid,user,args --sort pid
-  PID  PPID USER     COMMAND
-    1     0 node     node ./build/index
-   13     0 node     ps -eo pid,ppid,user,args --sort pid
-```
-On voit qu'il n'y plus qu'un process actif sur le conteneur docker qui est l'éxécution du serveur.
-## Pour lancer le projet :
-1. Cloner le repo avec `git clone https://github.com/yrlan-montagnier/WIK-DPS-TP02.git`
-2. Ouvrir le dossier dans vscode ou dans un terminal et éxecutez ces commandes :
-    -   ```
-        ## Pour lancer le build avec le dockerfile d'origine
-        docker build -t api_typescript_docker .
+    # Configuration for the server
+    server {
+        # Running port
+        listen 8081;
 
-        ## Pour lancer le build avec le dockerfile multi-stage (plus rapide)
-        docker build -t api_typescript_docker -f .\dockerfile2 .
-        ```
-    - Pour lancer le conteneur docker à partir de l'image que l'on vient de build :
-
-        `docker run -d -p 8080:8080 --name API_TypeScript_Yrlan api_typescript_docker`
+        # Proxying the connections
+        location / {
+            proxy_pass  http://my_app:8080;
+        }
+    }
+}
+```
+## Modifier le code de votre API pour afficher le hostname dans les logs à chaque requête sur /ping, lancer votre docker-compose.yaml et observer l'effet du l'équilibrage de charge
