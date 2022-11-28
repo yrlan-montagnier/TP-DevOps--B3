@@ -31,7 +31,7 @@ Le reverse     proxy tourne sur le port `8081` et est accessible depuis notre h√
 `proxy_pass  http://my_app:8080;` Dans le docker-compose, on a appel√© le service pour notre application **"my_app"**, qui tourne sur le port 8080 sur docker.
 Cela permet de faire en sorte que notre serveur NGinx redirige sur la bonne application.
 
-:file_folder: Fichier `nginx.com`
+:file_folder: Fichier `[nginx.com](./nginx.conf)`
 ```
 events { }
 
