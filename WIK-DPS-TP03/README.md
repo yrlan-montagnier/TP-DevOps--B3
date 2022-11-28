@@ -50,7 +50,7 @@ http {
 }
 ```
 ## Modifier le code de votre API pour afficher le hostname dans les logs à chaque requête sur /ping, lancer votre docker-compose.yaml et observer l'effet du l'équilibrage de charge
-J'ai rajoute dans mon `index.ts` cette ligne : `console.log(os.hostname());`
+J'ai rajoute dans mon :file_folder: [`index.ts`](./src/index.ts) cette ligne : `console.log(os.hostname());`
 Cela permet d'avoir dans les logs quel conteneur a été utilisé avec l'host associé.
 
 ![Hostname](./img/Hostname.png)
