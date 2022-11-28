@@ -1,7 +1,7 @@
 # WIK-DPS-TP03 | MONTAGNIER Yrlan
 
 ## Créer un docker-compose avec pour seul service un container basé sur le Dockerfile créé dans le TP WIK-DPS-TP02
-Voir :file_folder: [docker-compose.yaml](./docker-compose.yaml)
+Voir :file_folder: [``docker-compose.yaml``](./docker-compose.yaml)
 
 ## Augmenter le nombre de réplicas à 4 pour ce service
 Cela se fait dans le docker-compose.yaml grâce aux lignes 
