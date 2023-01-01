@@ -18,17 +18,17 @@
 - **Pour éxécuter le fichier pour lancer et tester ce pod :**
  ```
  PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl apply -f pod.yaml --> Créé la ressource (le pod) à partir du fichier (-f) pod.yaml
- pod/part-1-pod created
+ pod/part-01-pod created
  PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl get pod --> Vérifier si le pod est actif
  ```
  
 ### **Pour le tester vous devez faire un port-forwarding entre le port du Pod sur lequel votre API écoute et un port sur votre hôte.**
 
-- **Pour lancer le port-forwarding :** `kubectl port-forward publicecho  8080:8080`
+- **Pour lancer le port-forwarding :** `kubectl port-forward part-01-pod 8080:8080`
 - **Résultat `localhost:8080/ping` :**
-![](https://i.imgur.com/kMvLsM6.png)
+![](https://i.imgur.com/vuUrrj0.png)
 
-- **Pour delete ce pod : `kubectl delete pod publicecho`**
+- **Pour delete ce pod : `kubectl delete pod part-01-pod`**
 ----------------------------------------------------
 ## **Remplacer le Pod par un ReplicaSet afin de déployer 4 réplicas du Pod créé précédemment.**
 
