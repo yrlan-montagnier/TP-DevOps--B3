@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: publicecho
+  name: pod
 spec:
   containers:
-    - name: publicecho
+    - name: pod
       image: registry.cluster.wik.cloud/public/echo
       ports:
         - containerPort: 8080
