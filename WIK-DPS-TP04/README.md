@@ -14,7 +14,7 @@
 - [7. Faites une capture d'écran de la page sur votre navigateur avec le nom de domaine de votre choix pour votre service](#7-faites-une-capture-décran-de-la-page-sur-votre-navigateur-avec-le-nom-de-domaine-de-votre-choix-pour-votre-service)
 
 ## **Créer un Pod pour déployer l'image registry.cluster.wik.cloud/public/echo (c'est l'image créée lors du TP WIK-DPS-TP02) et le tester sur minikube en local.**
-- **Voir le fichier :file-folder: [`pod.yaml`](pod.yaml)**
+- **Voir le fichier :file_folder: [`pod.yaml`](pod.yaml)**
 - **Pour éxécuter le fichier pour lancer et tester ce pod :**
  ```
  PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl apply -f pod.yaml --> Créé la ressource (le pod) à partir du fichier (-f) pod.yaml
@@ -34,7 +34,7 @@
 
 L'objectif ici est de faire en sorte que notre pod soit répliqué 4fois.
 
-1. **Créer un fichier :file-folder: [replicaset.yaml](replicaset.yaml)**
+1. **Créer un fichier :file_folder: [replicaset.yaml](replicaset.yaml)**
 2. **Exécuter le fichier replica :**
 ```
 PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl apply -f replicaset.yaml
@@ -66,7 +66,7 @@ kubectl delete replicaset.apps/part-2-service
 ```
 ----------------------------------------------------
 ## **Remplacer le ReplicaSet par un Deployment afin de pouvoir définir une stratégie d'update en RollingRelease (50% en maxUnavailable).**
-1. **Créer un fichier :file-folder: [`deployment.yaml`](deployment.yaml)**
+1. **Créer un fichier :file_folder: [`deployment.yaml`](deployment.yaml)**
 2. **Exécuter le fichier de deployment :**
 ```
 PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl apply -f deployment.yaml
@@ -92,7 +92,7 @@ Handling connection for 8080
 - **Pour delete le deployment**
 ----------------------------------------------------
 ## **Créer un Service pour pouvoir communiquer avec les Pod du ReplicaSet créé précédemment, pour le tester vous devez faire un port-forwarding entre le port du Service sur lequel votre API écoute et un port sur votre hôte.**
-1. **Créer un fichier :file-folder: [service.yaml](service.yaml)**
+1. **Créer un fichier :file_folder: [service.yaml](service.yaml)**
 2. **Activer le plugin ingress nginx sur minikube et créer un Ingress (nom de domaine au choix) pour communiquer avec le Service créé précédemment.**
 
 ```
