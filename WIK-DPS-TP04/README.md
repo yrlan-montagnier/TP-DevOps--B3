@@ -14,7 +14,7 @@
 - [7. Faites une capture d'écran de la page sur votre navigateur avec le nom de domaine de votre choix pour votre service](#7-faites-une-capture-décran-de-la-page-sur-votre-navigateur-avec-le-nom-de-domaine-de-votre-choix-pour-votre-service)
 
 ## **Créer un Pod pour déployer l'image registry.cluster.wik.cloud/public/echo (c'est l'image créée lors du TP WIK-DPS-TP02) et le tester sur minikube en local.**
-> **Voir le fichier :file-folder: [`pod.yaml`](pod.yaml)**
+- **Voir le fichier :file-folder: [`pod.yaml`](pod.yaml)**
 - **Pour éxécuter le fichier pour lancer et tester ce pod :**
  ```
  PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl apply -f pod.yaml --> Créé la ressource (le pod) à partir du fichier (-f) pod.yaml
