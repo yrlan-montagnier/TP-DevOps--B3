@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
-  name: part-02-service
+  name: part-02-replicaset
   labels:
     app: replicat-set
     tier: part-02

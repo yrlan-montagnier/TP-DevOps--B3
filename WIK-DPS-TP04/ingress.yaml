@@ -27,7 +27,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-ingress-part-04-service
+  name: part-04-service
 spec:
   selector:
     app: publicecho
@@ -39,7 +39,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-ingress-part-04-service
+  name: part-04-ingress
 spec:
   rules:
     - host: yrlan.com
@@ -49,6 +49,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: service-ingress-part-04-service
+                name: part-04-service
                 port:
                   number: 8080
