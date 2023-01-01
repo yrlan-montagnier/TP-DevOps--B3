@@ -26,7 +26,7 @@
 
 - **Pour lancer le port-forwarding :** `kubectl port-forward part-01-pod 8080:8080`
 - **Résultat `localhost:8080/ping` :**
-![](https://i.imgur.com/vuUrrj0.png)
+![](https://i.imgur.com/VVMkwbr.png)
 
 - **Pour delete ce pod : `kubectl delete pod part-01-pod`**
 ----------------------------------------------------
@@ -38,20 +38,20 @@ L'objectif ici est de faire en sorte que notre pod soit répliqué 4fois.
 2. **Exécuter le fichier replica :**
 ```
 PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl apply -f replicaset.yaml
-replicaset.apps/part-2-service created
+replicaset.apps/part-02-replicaset created
 service/replica-set-service created
 ```
 ```
 PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl get pods
 NAME                   READY   STATUS    RESTARTS   AGE
-part-2-service-c2jrb   1/1     Running   0          6s
-part-2-service-j57wg   1/1     Running   0          6s
-part-2-service-rpmjx   1/1     Running   0          6s
-part-2-service-v6lck   1/1     Running   0          6s
+part-02-replicaset-c2jrb   1/1     Running   0          6s
+part-02-replicaset-j57wg   1/1     Running   0          6s
+part-02-replicaset-rpmjx   1/1     Running   0          6s
+part-02-replicaset-v6lck   1/1     Running   0          6s
 ```
-3. **Lancer le port-forwarding :**
+3. **Lancer le port-forwarding sur le port `:8080`**
 ```
-PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl port-forward replicaset.apps/part-2-service 8080:8080
+PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl port-forward replicaset.apps/part-02-replicaset 8080:8080
 Forwarding from 127.0.0.1:8080 -> 8080
 Forwarding from [::1]:8080 -> 8080
 Handling connection for 8080
@@ -62,7 +62,7 @@ Handling connection for 8080
 
 - **Pour delete le replicaset :**
 ```
-kubectl delete replicaset.apps/part-2-service
+kubectl delete replicaset.apps/part-02-replicaset
 ```
 ----------------------------------------------------
 ## **Remplacer le ReplicaSet par un Deployment afin de pouvoir définir une stratégie d'update en RollingRelease (50% en maxUnavailable).**
@@ -70,7 +70,7 @@ kubectl delete replicaset.apps/part-2-service
 2. **Exécuter le fichier de deployment :**
 ```
 PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl apply -f deployment.yaml
-deployment.apps/part-3-deployment created
+deployment.apps/part-03-deployment created
 service/deployment-service created
 ```
 3. **Vérifier les services actifs :**
@@ -83,13 +83,18 @@ replica-set-service   ClusterIP   10.101.13.72     <none>        80/TCP    68m
 ```
 4. **Lancer le port-forwarding :**
 ```
-PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl port-forward deployment.apps/part-3-deployment 8080:8080
+PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl port-forward deployment.apps/part-03-deployment 8080:8080
 Forwarding from 127.0.0.1:8080 -> 8080
 Forwarding from [::1]:8080 -> 8080
 Handling connection for 8080
 ```
 
 - **Pour delete le deployment**
+```
+PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl delete deployment.apps/part-03-deployment
+deployment.apps "part-03-deployment" deleted
+```
+
 ----------------------------------------------------
 ## **Créer un Service pour pouvoir communiquer avec les Pod du ReplicaSet créé précédemment, pour le tester vous devez faire un port-forwarding entre le port du Service sur lequel votre API écoute et un port sur votre hôte.**
 1. **Créer un fichier :file_folder: [service.yaml](service.yaml)**
@@ -99,7 +104,7 @@ Handling connection for 8080
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-ingress-service-part-04
+  name: ingress-part-04
 spec:
   rules:
     - host: yrlan.com
@@ -109,7 +114,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: service-ingress-service-part-04
+                name: service-part-04
                 port:
                   number: 8080
 ```
@@ -123,7 +128,17 @@ afin de rajouter une ligne à ce fichier, dans notre cas :
 127.0.0.1 yrlan.com
 ```
 
-4. **Vous pouvez alors accéder via votre navigateur au service créé précédemment Faites une capture d'écran de la page sur votre navigateur avec le nom de domaine de votre choix pour votre service.**
+4. **Exécuter le fichier de service :**
+```
+PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl apply -f ingress.yaml
+deployment.apps/part-04-service created
+service/service-ingress-part-04 created
+ingress.networking.k8s.io/ingress-ingress-part-04 created
+```
+
+5. Lancer le port forwarding
+
+6. **Vous pouvez alors accéder via votre navigateur au service créé précédemment Faites une capture d'écran de la page sur votre navigateur avec le nom de domaine de votre choix pour votre service.**
 
 ## Exécution du service (fichier .yaml final) : 
 
