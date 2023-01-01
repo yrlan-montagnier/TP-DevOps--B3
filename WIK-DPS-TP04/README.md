@@ -136,22 +136,46 @@ service/service-ingress-part-04 created
 ingress.networking.k8s.io/ingress-ingress-part-04 created
 ```
 
-5. Lancer le port forwarding
-
+5. **Lancer le port forwarding**
+```
+kubectl port-forward deployment.apps/part-04-service 8080:8080
 6. **Vous pouvez alors accéder via votre navigateur au service créé précédemment Faites une capture d'écran de la page sur votre navigateur avec le nom de domaine de votre choix pour votre service.**
+```
 
 ## Exécution du service (fichier .yaml final) : 
 
-Exécuter le fichier :file:folder: service.yaml pour démarrer le service :
+1. Exécuter le fichier :file_folder: `service.yaml` :
 ```
-kubectl apply -f service.yaml
-```
-Pour stopper le service :
-```
-kubectl delete deployment.apps/service-service-part-04
+Yrlan@MSI-9SEXR MINGW64 ~/OneDrive - Ynov/B3/DevOps/TP's DevOps B3/WIK-DPS-TP04 (main)
+$ kubectl apply -f ingress.yaml
+deployment.apps/part-04 created
+service/service-ingress-part-04 created
+ingress.networking.k8s.io/ingress-part-04 created
 ```
 
-Pour voir les services, le réseau sur lequel ils tournent etcc..
+- Pour stopper les services :
 ```
-kubectl get pods,services,deployments,ingress.networking.k8s.io
+kubectl delete deployment.apps/part-04 service/service-ingress-part-04 ingress.networking.k8s.io/ingress-part-04
 ```
+
+- Pour voir les services, le réseau sur lequel ils tournent etcc..
+```
+Yrlan@MSI-9SEXR MINGW64 ~/OneDrive - Ynov/B3/DevOps/TP's DevOps B3/WIK-DPS-TP04 (main)
+$ kubectl get pods,services,deployments,ingress.networking.k8s.io
+NAME                           READY   STATUS    RESTARTS   AGE
+pod/part-04-589fccd98f-2vnxp   1/1     Running   0          6s
+pod/part-04-589fccd98f-jrn77   1/1     Running   0          6s
+pod/part-04-589fccd98f-pxfs6   1/1     Running   0          6s
+pod/part-04-589fccd98f-z7fxz   1/1     Running   0          6s
+
+NAME                              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/kubernetes                ClusterIP   10.96.0.1       <none>        443/TCP    20d
+service/service-ingress-part-04   ClusterIP   10.102.63.183   <none>        8080/TCP   6s
+
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/part-04   4/4     4            4           6s
+
+NAME                                        CLASS   HOSTS       ADDRESS   PORTS   AGE
+ingress.networking.k8s.io/ingress-part-04   nginx   yrlan.com             80      6s
+```
+![](https://i.imgur.com/wtRu8A9.png)

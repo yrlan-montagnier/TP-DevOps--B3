@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: part-04-service
+  name: part-04
   labels:
     app: publicecho
 spec:
@@ -19,7 +19,7 @@ spec:
         app: publicecho
     spec:
       containers:
-        - name: part-04-service
+        - name: part-04
           image: registry.cluster.wik.cloud/public/echo
           ports:
             - containerPort: 8080
@@ -27,7 +27,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: part-04-service
+  name: service-ingress-part-04
 spec:
   selector:
     app: publicecho
@@ -39,16 +39,17 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: part-04-ingress
+  name: ingress-part-04
 spec:
+  ingressClassName: nginx
   rules:
     - host: yrlan.com
       http:
         paths:
-          - path: /ping
+          - path: /
             pathType: Prefix
             backend:
               service:
-                name: part-04-service
+                name: service-ingress-part-04
                 port:
                   number: 8080
