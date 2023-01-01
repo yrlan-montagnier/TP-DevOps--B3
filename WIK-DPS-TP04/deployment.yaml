@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: part-3-deployment
+  name: part-03-deployment
   labels:
-    app: publicecho
+    app: part-01-pod
 spec:
   replicas: 4
   selector:
     matchLabels:
-      app: publicecho
+      app: part-01-pod
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -16,10 +16,10 @@ spec:
   template:
     metadata:
       labels:
-        app: publicecho
+        app: part-01-pod
     spec:
       containers:
-        - name: part-3-deployment
+        - name: part-03-deployment
           image: registry.cluster.wik.cloud/public/echo
           ports:
             - containerPort: 8080
@@ -30,7 +30,7 @@ metadata:
   name: deployment-service
 spec:
   selector:
-    app: publicecho
+    app: part-01-pod
   ports:
     - protocol: TCP
       port: 80
