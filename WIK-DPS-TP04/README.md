@@ -3,17 +3,7 @@
 ### **Pour chaque étape il faut produire les fichiers YAML nécessaires et les conserver pour les communiquer lors du rendu.**
 --------------------------------------------
 
-# Sommaire
-
-- [1. Créer un Pod pour déployer l'image registry.cluster.wik.cloud/public/echo](#1-créer-un-pod-pour-déployer-limage-registryclusterwikcloudpublicecho-cest-limage-créée-lors-du-tp-wik-dps-tp02-et-le-tester-sur-minikube-en-local)
-- [2. Remplacer le Pod par un ReplicaSet afin de déployer 4 réplicas du Pod créé précédemment](#2-remplacer-le-pod-par-un-replicaset-afin-de-déployer-4-réplicas-du-pod-créé-précédemment)
-- [3. Remplacer le ReplicaSet par un Deployment afin de pouvoir définir une stratégie d'update en RollingUpdate](#3-remplacer-le-replicaset-par-un-deployment-afin-de-pouvoir-définir-une-stratégie-dupdate-en-rollingupdate-50-en-maxunavailable)
-- [4. Créer un Service pour pouvoir communiquer avec les Pod du ReplicaSet créé précédemment](#4-créer-un-service-pour-pouvoir-communiquer-avec-les-pod-du-replicaset-créé-précédemment)
-- [5. Activer le plugin ingress nginx sur minikube et créer un Ingress (nom de domaine au choix) pour communiquer avec le Service créé précédemment.](#5-activer-le-plugin-ingress-nginx-sur-minikube-et-créer-un-ingress-nom-de-domaine-au-choix-pour-communiquer-avec-le-service-créé-précédemment)
-- [6. Tester en ajoutant le nom de domaine choisi dans /etc/hosts afin de résoudre localement vers le service nginx de minikube](#6-tester-en-ajoutant-le-nom-de-domaine-choisi-dans-etchosts-afin-de-résoudre-localement-vers-le-service-nginx-de-minikube)
-- [7. Faites une capture d'écran de la page sur votre navigateur avec le nom de domaine de votre choix pour votre service](#7-faites-une-capture-décran-de-la-page-sur-votre-navigateur-avec-le-nom-de-domaine-de-votre-choix-pour-votre-service)
-
-## **Créer un Pod pour déployer l'image registry.cluster.wik.cloud/public/echo (c'est l'image créée lors du TP WIK-DPS-TP02) et le tester sur minikube en local.**
+## **Créer un Pod pour déployer l'image registry.cluster.wik.cloud/public/echo et le tester sur minikube en local**
 - **Voir le fichier :file_folder: [`pod.yaml`](pod.yaml)**
 - **Pour éxécuter le fichier pour lancer et tester ce pod :**
  ```
@@ -34,7 +24,7 @@
 
 L'objectif ici est de faire en sorte que notre pod soit répliqué 4fois.
 
-1. **Créer un fichier :file_folder: [replicaset.yaml](replicaset.yaml)**
+1. **Créer un fichier :file_folder: [`replicaset.yaml`](replicaset.yaml)**
 2. **Exécuter le fichier replica :**
 ```
 PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl apply -f replicaset.yaml
@@ -97,7 +87,8 @@ deployment.apps "part-03-deployment" deleted
 
 ----------------------------------------------------
 ## **Créer un Service pour pouvoir communiquer avec les Pod du ReplicaSet créé précédemment, pour le tester vous devez faire un port-forwarding entre le port du Service sur lequel votre API écoute et un port sur votre hôte.**
-1. **Créer un fichier :file_folder: [service.yaml](service.yaml)**
+
+1. **Voir le fichier :file_folder: [`ingress.yaml`](ingress.yaml)**
 2. **Activer le plugin ingress nginx sur minikube et créer un Ingress (nom de domaine au choix) pour communiquer avec le Service créé précédemment.**
 
 ```
@@ -128,7 +119,7 @@ afin de rajouter une ligne à ce fichier, dans notre cas :
 127.0.0.1 yrlan.com
 ```
 
-4. **Exécuter le fichier de service :**
+4. **Exécuter le fichier pour lancer le service ingress :**
 ```
 PS C:\Users\yrlan\OneDrive - Ynov\B3\DevOps\TP's DevOps B3\WIK-DPS-TP04> kubectl apply -f ingress.yaml
 deployment.apps/part-04-service created
@@ -136,16 +127,13 @@ service/service-ingress-part-04 created
 ingress.networking.k8s.io/ingress-ingress-part-04 created
 ```
 
-5. **Lancer le port forwarding**
-```
-kubectl port-forward deployment.apps/part-04-service 8080:8080
-```
+5. **Vous pouvez alors accéder via votre navigateur au service créé précédemment Faites une capture d'écran de la page sur votre navigateur avec le nom de domaine de votre choix pour votre service.**
 
-6. **Vous pouvez alors accéder via votre navigateur au service créé précédemment Faites une capture d'écran de la page sur votre navigateur avec le nom de domaine de votre choix pour votre service.**
+![](https://i.imgur.com/RwRvnp6.png)
 
 ## Exécution du service (fichier .yaml final) : 
 
-1. Exécuter le fichier :file_folder: `service.yaml` :
+1. **Exécuter le fichier :file_folder: [`ingress.yaml`](./ingress.yaml)** :
 ```
 Yrlan@MSI-9SEXR MINGW64 ~/OneDrive - Ynov/B3/DevOps/TP's DevOps B3/WIK-DPS-TP04 (main)
 $ kubectl apply -f ingress.yaml
@@ -154,12 +142,12 @@ service/service-ingress-part-04 created
 ingress.networking.k8s.io/ingress-part-04 created
 ```
 
-- Pour stopper les services :
+- **Pour stopper les services** :
 ```
 kubectl delete deployment.apps/part-04 service/service-ingress-part-04 ingress.networking.k8s.io/ingress-part-04
 ```
 
-- Pour voir les services, le réseau sur lequel ils tournent etcc..
+- **Pour voir les services, le réseau sur lequel ils tournent etcc..*
 ```
 Yrlan@MSI-9SEXR MINGW64 ~/OneDrive - Ynov/B3/DevOps/TP's DevOps B3/WIK-DPS-TP04 (main)
 $ kubectl get pods,services,deployments,ingress.networking.k8s.io
@@ -179,4 +167,5 @@ deployment.apps/part-04   4/4     4            4           6s
 NAME                                        CLASS   HOSTS       ADDRESS   PORTS   AGE
 ingress.networking.k8s.io/ingress-part-04   nginx   yrlan.com             80      6s
 ```
+
 ![](https://i.imgur.com/wtRu8A9.png)
