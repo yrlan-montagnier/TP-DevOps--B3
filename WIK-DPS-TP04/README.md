@@ -139,8 +139,9 @@ ingress.networking.k8s.io/ingress-ingress-part-04 created
 5. **Lancer le port forwarding**
 ```
 kubectl port-forward deployment.apps/part-04-service 8080:8080
-6. **Vous pouvez alors accéder via votre navigateur au service créé précédemment Faites une capture d'écran de la page sur votre navigateur avec le nom de domaine de votre choix pour votre service.**
 ```
+
+6. **Vous pouvez alors accéder via votre navigateur au service créé précédemment Faites une capture d'écran de la page sur votre navigateur avec le nom de domaine de votre choix pour votre service.**
 
 ## Exécution du service (fichier .yaml final) : 
 
